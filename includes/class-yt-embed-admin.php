@@ -70,7 +70,8 @@ class YT_Embed_Admin {
         <!-- Liste -->
         <h2>📺 Chaînes enregistrées</h2>
         <?php foreach ($channels as $channel):
-            $videos = YT_Embed_API::fetch_latest_videos($channel->channel_id); ?>
+            $api_response = YT_Embed_API::fetch_latest_videos($channel->channel_id);
+            $videos = isset($api_response['videos']) && is_array($api_response['videos']) ? $api_response['videos'] : []; ?>
             <div class="mb-6">
                 <strong><?= esc_html($channel->channel_name) ?></strong>
                 <form method="post">
