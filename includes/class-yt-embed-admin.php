@@ -31,6 +31,7 @@ class YT_Embed_Admin {
 
         <!-- Clé API -->
         <form method="post" class="mb-6">
+            <?php wp_nonce_field('yt_embed_save_api_key_action', 'yt_embed_save_api_key_nonce'); ?>
             <h2>🔑 Clé API YouTube</h2>
             <input type="text" name="yt_api_key" value="<?= esc_attr(get_option('yt_embed_api_key')) ?>" class="border p-2 w-full" required>
             <button type="submit" name="save_api_key" class="bg-green-600 text-white px-4 py-2 rounded mt-2">Enregistrer</button>
@@ -38,6 +39,7 @@ class YT_Embed_Admin {
 
         <!-- Ajout de chaîne -->
         <form method="post" class="mb-6">
+            <?php wp_nonce_field('yt_embed_add_channel_action', 'yt_embed_add_channel_nonce'); ?>
             <h2>➕ Ajouter une chaîne</h2>
             <div class="flex flex-wrap gap-4">
                 <input type="text" name="channel_name" placeholder="Nom" required class="border p-2 w-1/4">
@@ -58,6 +60,7 @@ class YT_Embed_Admin {
             <div class="mb-6">
                 <strong><?= esc_html($channel->channel_name) ?></strong>
                 <form method="post">
+                    <?php wp_nonce_field('yt_embed_delete_channel_action_' . $channel->id, 'yt_embed_delete_channel_nonce'); ?>
                     <input type="hidden" name="delete_channel_id" value="<?= $channel->id ?>">
                     <button type="submit" class="text-red-600">🗑 Supprimer</button>
                 </form>
@@ -75,14 +78,19 @@ class YT_Embed_Admin {
     }
 
     private function handle_form_submission() {
+        if (!current_user_can('manage_options')) {
+            wp_die(__('Vous n\'avez pas les permissions suffisantes pour effectuer cette action.', 'youtube-embed-plugin'));
+        }
         global $wpdb;
         $table = $wpdb->prefix . 'yt_embed_channels';
 
         if (isset($_POST['save_api_key'])) {
+            check_admin_referer('yt_embed_save_api_key_action', 'yt_embed_save_api_key_nonce');
             update_option('yt_embed_api_key', sanitize_text_field($_POST['yt_api_key']));
         }
 
         if (isset($_POST['add_channel'])) {
+            check_admin_referer('yt_embed_add_channel_action', 'yt_embed_add_channel_nonce');
             $wpdb->insert($table, [
                 'channel_name' => sanitize_text_field($_POST['channel_name']),
                 'channel_id' => sanitize_text_field($_POST['channel_id']),
@@ -91,6 +99,7 @@ class YT_Embed_Admin {
         }
 
         if (isset($_POST['delete_channel_id'])) {
+            check_admin_referer('yt_embed_delete_channel_action_' . $_POST['delete_channel_id'], 'yt_embed_delete_channel_nonce');
             $wpdb->delete($table, ['id' => intval($_POST['delete_channel_id'])]);
         }
     }
