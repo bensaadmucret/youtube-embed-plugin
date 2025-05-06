@@ -22,9 +22,6 @@ class YT_Embed_Admin {
     // On charge uniquement sur notre page admin
     if ($hook !== 'toplevel_page_yt-embed-settings') return;
 
-    // Tailwind CDN
-    wp_enqueue_style('yt-embed-tailwind', 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
-
     // CSS custom
     wp_enqueue_style('yt-embed-admin-style', YT_EMBED_URL . 'assets/css/admin.css');
 
@@ -81,7 +78,7 @@ class YT_Embed_Admin {
                     <input type="hidden" name="delete_channel_id" value="<?= $channel->id ?>">
                     <button type="submit" class="text-red-600">🗑 Supprimer</button>
                 </form>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-2">
+                <div class="yt-videos-grid mt-2">
                     <?php foreach ($videos as $video): ?>
                         <div class="border p-2 bg-white shadow">
                             <img src="<?= esc_url($video['thumbnail']) ?>" alt="">
