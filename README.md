@@ -3,6 +3,8 @@
 Un plugin WordPress simple pour intégrer les dernières vidéos d'une chaîne YouTube dans vos articles et pages à l’aide d’un shortcode.  
 Interface propre en Tailwind CSS, gestion des chaînes, aperçu vidéo et lien avec les catégories WordPress.
 
+![Aperçu du plugin YouTube Embed](./youtube_plugin.png)
+
 ---
 
 ## 🚀 Fonctionnalités
