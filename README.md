@@ -30,13 +30,11 @@ Interface propre en Tailwind CSS, gestion des chaînes, aperçu vidéo et lien a
 
 ```bash
 [yt_embed channel="ID_DE_LA_CHAINE" layout="grid" count="6"]
-```
-
----
-
 [yt_embed channel="UC_x5XG1OV2P6uZZ5FSM9Ttw"]
 [yt_embed channel="UC_x5XG1OV2P6uZZ5FSM9Ttw" layout="grid" count="6"]
 [yt_embed channel="UC_x5XG1OV2P6uZZ5FSM9Ttw" layout="list" count="6"]
+```
+
 
 
 🔐 Clé API YouTube
