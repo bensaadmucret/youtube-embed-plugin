@@ -18,9 +18,19 @@ class YT_Embed_Admin {
         );
     }
 
-    public function enqueue_admin_assets() {
-        wp_enqueue_style('yt-embed-tailwind', 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
-    }
+    public function enqueue_admin_assets($hook) {
+    // On charge uniquement sur notre page admin
+    if ($hook !== 'toplevel_page_yt-embed-settings') return;
+
+    // Tailwind CDN
+    wp_enqueue_style('yt-embed-tailwind', 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+
+    // CSS custom
+    wp_enqueue_style('yt-embed-admin-style', YT_EMBED_URL . 'assets/css/admin.css');
+
+    // JS admin
+    wp_enqueue_script('yt-embed-admin-script', YT_EMBED_URL . 'assets/js/admin.js', [], false, true);
+}
 
     public function render_settings_page() {
         $this->handle_form_submission();
