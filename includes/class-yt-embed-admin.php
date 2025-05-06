@@ -37,14 +37,21 @@ class YT_Embed_Admin {
         global $wpdb;
         $table = $wpdb->prefix . 'yt_embed_channels';
         $channels = $wpdb->get_results("SELECT * FROM $table");
+        $api_key_from_config = defined('YT_EMBED_API_KEY');
+        $current_api_key = $api_key_from_config ? '******** (Définie dans yt-embed-config.php)' : get_option('yt_embed_api_key');
         ?>
 
         <!-- Clé API -->
         <form method="post" class="mb-6">
             <?php wp_nonce_field('yt_embed_save_api_key_action', 'yt_embed_save_api_key_nonce'); ?>
             <h2>🔑 Clé API YouTube</h2>
-            <input type="text" name="yt_api_key" value="<?= esc_attr(get_option('yt_embed_api_key')) ?>" class="border p-2 w-full" required>
-            <button type="submit" name="save_api_key" class="bg-green-600 text-white px-4 py-2 rounded mt-2">Enregistrer</button>
+            <?php if ($api_key_from_config): ?>
+                <div class="p-3 mb-3 text-sm text-blue-700 bg-blue-100 rounded-lg" role="alert">
+                    <span class="font-medium">Info:</span> La clé API est actuellement définie via le fichier <code>yt-embed-config.php</code> et ne peut pas être modifiée ici.
+                </div>
+            <?php endif; ?>
+            <input type="text" name="yt_api_key" value="<?= esc_attr($current_api_key) ?>" class="border p-2 w-full" <?= $api_key_from_config ? 'disabled' : '' ?> required>
+            <button type="submit" name="save_api_key" class="bg-green-600 text-white px-4 py-2 rounded mt-2" <?= $api_key_from_config ? 'disabled' : '' ?>>Enregistrer</button>
         </form>
 
         <!-- Ajout de chaîne -->
@@ -95,8 +102,11 @@ class YT_Embed_Admin {
         $table = $wpdb->prefix . 'yt_embed_channels';
 
         if (isset($_POST['save_api_key'])) {
-            check_admin_referer('yt_embed_save_api_key_action', 'yt_embed_save_api_key_nonce');
-            update_option('yt_embed_api_key', sanitize_text_field($_POST['yt_api_key']));
+            // On ne sauvegarde que si la clé n'est PAS définie par le fichier de config
+            if (!defined('YT_EMBED_API_KEY')) {
+                check_admin_referer('yt_embed_save_api_key_action', 'yt_embed_save_api_key_nonce');
+                update_option('yt_embed_api_key', sanitize_text_field($_POST['yt_api_key']));
+            }
         }
 
         if (isset($_POST['add_channel'])) {

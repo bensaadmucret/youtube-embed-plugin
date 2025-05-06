@@ -14,6 +14,11 @@ if (!defined('ABSPATH')) exit;
 define('YT_EMBED_PATH', plugin_dir_path(__FILE__));
 define('YT_EMBED_URL', plugin_dir_url(__FILE__));
 
+// Charger la configuration personnalisée si elle existe
+if (file_exists(YT_EMBED_PATH . 'yt-embed-config.php')) {
+    require_once YT_EMBED_PATH . 'yt-embed-config.php';
+}
+
 require_once YT_EMBED_PATH . 'includes/class-yt-embed-admin.php';
 require_once YT_EMBED_PATH . 'includes/class-yt-embed-api.php';
 require_once YT_EMBED_PATH . 'includes/class-yt-embed-shortcode.php';
