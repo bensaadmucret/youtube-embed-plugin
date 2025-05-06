@@ -48,11 +48,4 @@ function yt_embed_create_table() {
     dbDelta($sql);
 }
 
-// suppression de la table à la suppression du plugin
-register_uninstall_hook(__FILE__, 'yt_embed_delete_table');
-function yt_embed_delete_table() {
-    global $wpdb;
-    $table = $wpdb->prefix . 'yt_embed_channels';
-    $wpdb->query("DROP TABLE IF EXISTS $table");
-}
 
