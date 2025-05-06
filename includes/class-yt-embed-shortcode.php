@@ -40,9 +40,19 @@ class YT_Embed_Shortcode {
         echo '<div class="yt-public-videos-container '. esc_attr($layout_class) . '">';
         foreach ($videos as $video) {
             echo '<div class="yt-public-video-item">';
-            echo '<img src="' . esc_url($video['thumbnail']) . '" alt="' . esc_attr($video['title']) . '">';
+            // Remplacer l'image et le lien par l'iframe YouTube
+            echo '<div class="yt-video-player-wrapper">'; // Wrapper pour le ratio
+            echo '<iframe ';
+            echo 'src="https://www.youtube.com/embed/' . esc_attr($video['video_id']) . '" ';
+            echo 'title="' . esc_attr($video['title']) . '" ';
+            echo 'frameborder="0" ';
+            echo 'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ';
+            echo 'allowfullscreen';
+            echo '></iframe>';
+            echo '</div>';
             echo '<h3 class="yt-video-title">' . esc_html($video['title']) . '</h3>';
-            echo '<a class="yt-video-link" href="https://youtu.be/' . esc_attr($video['video_id']) . '" target="_blank" rel="noopener noreferrer">Voir sur YouTube</a>';
+            // On peut garder un lien direct en plus si souhaité, ou le supprimer.
+            // echo '<a class="yt-video-link" href="https://youtu.be/' . esc_attr($video['video_id']) . '" target="_blank" rel="noopener noreferrer">Voir sur YouTube</a>';
             echo '</div>';
         }
         echo '</div>';
